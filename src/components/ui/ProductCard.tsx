@@ -1,0 +1,6 @@
+import { Link } from 'react-router-dom';
+import type { Product } from '@/types/shop';
+import { useShop } from '@/hooks/useShop';
+import { money } from '@/utils/format';
+import { Icon } from '@/components/ui/Icon';
+export function ProductCard({product}:{product:Product}) { const {wishlist,toggleWish,add} = useShop(); const saved = wishlist.includes(product.id); return <article className="product-card"><div className="product-image"><Link to={`/product/${product.slug}`} aria-label={`View ${product.name}`}><img src={product.image} alt={product.name} loading="lazy"/></Link>{product.isNew && <span className="product-tag">NEW</span>}<button className={`wish-button ${saved?'saved':''}`} aria-label={`${saved?'Remove':'Save'} ${product.name} ${saved?'from':'to'} wishlist`} aria-pressed={saved} onClick={() => toggleWish(product.id)}><Icon name="heart" fill={saved?'currentColor':'none'} width="17"/></button><button className="quick-add" onClick={() => add(product,1)}>ADD TO BAG <Icon name="plus" width="15"/></button></div><div className="product-meta"><div><Link to={`/product/${product.slug}`} className="product-name">{product.name}</Link><p>{product.collection}</p></div><span className="product-price">{money(product.price)}</span></div></article>; }

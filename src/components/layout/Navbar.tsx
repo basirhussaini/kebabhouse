@@ -1,0 +1,12 @@
+import { useEffect, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Icon } from '@/components/ui/Icon';
+import { useShop } from '@/hooks/useShop';
+import { collections } from '@/data/catalog';
+import { collectionUrl } from '@/utils/format';
+export function Navbar() {
+ const {count,wishlist} = useShop(); const [scrolled,setScrolled] = useState(false); const [menu,setMenu] = useState(false); const [dropdown,setDropdown] = useState(false); const location = useLocation(); const home = location.pathname === '/' || location.pathname === '/index.html';
+ useEffect(() => {const update = () => setScrolled(window.scrollY > 30);update();window.addEventListener('scroll',update,{passive:true});return () => window.removeEventListener('scroll',update);},[]);
+ useEffect(() => {setMenu(false);setDropdown(false);},[location]);
+ return <header className={`site-header ${home&&!scrolled&&!menu?'header-transparent':''}`}><a className="skip-link" href="#main-content">Skip to content</a><div className="header-inner"><Link className="brand" to="/" aria-label="Maison home">maison<span>.</span></Link><nav className={`main-nav ${menu?'nav-open':''}`} aria-label="Main navigation"><div className="nav-dropdown" onKeyDown={e => {if(e.key==='Escape') setDropdown(false);}}><div className="nav-product"><NavLink to="/products">Products</NavLink><button aria-label="Show collections" aria-expanded={dropdown} aria-controls="collection-menu" onClick={() => setDropdown(!dropdown)}><Icon name="chevron" width="13"/></button></div>{dropdown&&<div className="dropdown-panel" id="collection-menu"><span className="eyebrow">Explore the collections</span>{collections.map(c => <Link key={c.name} to={collectionUrl(c.name)}>{c.name}</Link>)}<Link to="/products">Shop all pieces <span>↗</span></Link></div>}</div><NavLink to="/about">About</NavLink></nav><div className="header-actions"><Link to="/wishlist" className="icon-link" aria-label={`Wishlist, ${wishlist.length} saved items`}><Icon name="heart"/>{wishlist.length>0&&<span className="tiny-count">{wishlist.length}</span>}</Link><Link to="/cart" className="bag-link" aria-label={`Shopping bag, ${count} items`}><Icon name="bag"/><span className="bag-label">Bag</span><span className="bag-count">{count}</span></Link><button className="mobile-menu" aria-label={menu?'Close navigation':'Open navigation'} aria-expanded={menu} onClick={() => setMenu(!menu)}><Icon name={menu?'close':'menu'}/></button></div></div></header>;
+}

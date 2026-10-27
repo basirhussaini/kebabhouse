@@ -1,0 +1,12 @@
+import { createBrowserRouter } from 'react-router-dom';
+import { SiteLayout } from '@/components/layout/SiteLayout';
+import { Index } from '@/pages/Index';
+import { Products } from '@/pages/Products';
+import { ProductDetail } from '@/pages/ProductDetail';
+import { About } from '@/pages/About';
+import { Cart } from '@/pages/Cart';
+import { Checkout } from '@/pages/Checkout';
+import { Wishlist } from '@/pages/Wishlist';
+import { NotFound } from '@/pages/NotFound';
+import { RouteError } from '@/pages/RouteError';
+export const router=createBrowserRouter([{path:'/',element:<SiteLayout/>,errorElement:<RouteError/>,children:[{index:true,element:<Index/>},{path:'index.html',element:<Index/>},{path:'products',element:<Products/>},{path:'product/:slug',element:<ProductDetail/>},{path:'about',element:<About/>},{path:'cart',element:<Cart/>},{path:'checkout',element:<Checkout/>},{path:'wishlist',element:<Wishlist/>},{path:'*',element:<NotFound/>}]}]);
